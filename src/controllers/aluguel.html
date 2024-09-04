@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Livro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Cadastro de Livro</h1>
+        <form id="bookForm">
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" name="titulo" required>
+            </div>
+            <div class="form-group">
+                <label for="autor">Autor:</label>
+                <input type="text" id="autor" name="autor" required>
+            </div>
+            <div class="form-group">
+                <label for="genero">Gênero:</label>
+                <input type="text" id="genero" name="genero" required>
+            </div>
+            <div class="form-group">
+                <label for="ano">Ano:</label>
+                <input type="text" id="ano" name="ano" required>
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="processForm()">Enviar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let nextId = 1;
+
+        function model(body, id = nextId++) {
+            const ano = body.ano;
+            let soNumeros = true;
+
+            ano.split("").forEach((el) => {
+                if (isNaN(Number(el))) {
+                    soNumeros = false;
+                }
+            });
+
+            if (
+                body.titulo != undefined &&
+                body.autor != undefined &&
+                body.genero != undefined &&
+                body.titulo != "" &&
+                body.autor != "" &&
+                body.genero != "" &&
+                ano != "" &&
+                soNumeros == true
+            ) {
+                return {
+                    id,
+                    titulo: body.titulo,
+                    autor: body.autor,
+                    genero: body.genero,
+                    ano: body.ano,
+                };
+            }
+            return null;
+        }
+
+        function processForm() {
+            const form = document.getElementById('bookForm');
+            const formData = new FormData(form);
+
+            const body = {
+                titulo: formData.get('titulo'),
+                autor: formData.get('autor'),
+                genero: formData.get('genero'),
+                ano: formData.get('ano'),
+            };
+
+            const result = model(body);
+
+            if (result) {
+                alert(`Livro cadastrado com sucesso!\nID: ${result.id}\nTítulo: ${result.titulo}\nAutor: ${result.autor}\nGênero: ${result.genero}\nAno: ${result.ano}`);
+            } else {
+                alert('Preencha todos os campos corretamente.');
+            }
+        }
+    </script>
+</body>
+</html>
